@@ -86,11 +86,17 @@
         .attr("cx", padding)
         .attr("cy", padding)
         .style("fill", function() { return color(Math.floor(Math.random() * 19)); })
-        .on('mouseover', function() {
+        .on('mouseover', function(d) {
           tooltip.transition()
                  .duration(100)
                  .style('opacity', 0.9);
-          tooltip.html('test')
+          tooltip.html('<strong>fall:</strong> ' + d.fall + '<br/>' +
+                       '<strong>mass:</strong> ' + d.mass + '<br/>' +
+                       '<strong>name:</strong> ' + d.name + '<br/>' +
+                       '<strong>nametype:</strong> ' + d.nametype + '<br/>' +
+                       '<strong>recclass:</strong> ' + d.recclass + '<br/>' +
+                       '<strong>reclat:</strong> ' + d.reclat + '<br/>' +
+                       '<strong>year:</strong> ' + d.year)
                 .style('left', (d3.event.pageX + 30) + 'px')
                 .style('top', (d3.event.pageY + 15) + 'px');
         })

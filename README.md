@@ -42,6 +42,6 @@ This project uses D3.js and Google Maps' API to visualize meteorite landings.
 + Google Maps API
 
 ### Live Demo
-Coming Soon
+http://codepen.io/stancheta/full/akZPLo/
 
 ---
