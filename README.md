@@ -39,6 +39,7 @@ This project uses D3.js and Google Maps' API to visualize meteorite landings.
 + Gulp.js
 + Bower
 + Node
++ Google Maps API
 
 ### Live Demo
 Coming Soon
