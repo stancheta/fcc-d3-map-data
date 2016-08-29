@@ -26,15 +26,21 @@ main {
 }
 
 .meteorites svg {
-  width:50px;
-  height:50px;
+  width:75px;
+  height:75px;
   font: 10px sans-serif;
 }
 
 .meteorites circle {
-  fill: brown;
+  fill-opacity: 0.5;
   stroke: black;
-  stroke-width: 1.5px;
+  stroke-width: 0.5px;
+  stroke-opacity: 0.8px;
+}
+
+.meteorites circle:hover {
+  fill: #444 !important;
+  cursor: pointer;
 }
 
 .tooltip {

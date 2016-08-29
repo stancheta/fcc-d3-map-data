@@ -26,16 +26,19 @@
   };
 
   var handleData = function(data) {
+
+    // format and sort data
     var fData = [];
-    data.features.forEach(function(d, i) {
+    data.features.forEach(function(d) {
       if(d.geometry != null) {
         var coord = d.geometry.coordinates;
         var prop = d.properties;
+        var mass = prop.mass > 0 ? prop.mass : 1;
         fData.push({
           lat: +coord[1],
           long: +coord[0],
           fall: prop.fall,
-          mass: +prop.mass,
+          mass: +mass,
           name: prop.name,
           nametype: prop.nametype,
           recclass: prop.recclass,
@@ -44,33 +47,58 @@
         });
       }
     });
+    fData.sort(function(a, b) { return b.mass - a.mass; });
     var map = new google.maps.Map(d3.select("#map").node(), {
       zoom: 2,
       center: new google.maps.LatLng(0, 0),
       mapTypeId: google.maps.MapTypeId.TERRAIN
     });
 
+    var tooltip = d3.select('#map')
+                    .append('div')
+                    .attr('class', 'tooltip')
+                    .style('opacity', 0);
+
     var overlay = new google.maps.OverlayView();
 
+    var color = d3.scale.category20();
+    var minMass = fData[fData.length - 1].mass;
+    var maxMass = fData[0].mass;
+    console.log(minMass + ' ' + maxMass);
+    var meteoriteSize = d3.scale.log().base(2).domain([minMass, maxMass]).range([5, 35]);
     overlay.onAdd = function() {
-      var layer = d3.select(this.getPanes().overlayLayer).append("div")
+      var layer = d3.select(this.getPanes().overlayMouseTarget).append("div")
         .attr("class", "meteorites");
 
       overlay.draw = function() {
         var projection = this.getProjection(),
-        padding = 10;
+        padding = 36;
 
         var marker = layer.selectAll("svg")
         .data(fData)
         .each(transform) // update existing markers
-        .enter().append("svg")
+        .enter().append("svg:svg")
         .each(transform)
         .attr("class", "marker");
 
-        marker.append("circle")
-        .attr("r", 4.5)
+        marker.append("svg:circle")
+        .attr("r", function(d) { if (isNaN(meteoriteSize(d.mass))) console.log(d.mass); return meteoriteSize(d.mass); })
         .attr("cx", padding)
-        .attr("cy", padding);
+        .attr("cy", padding)
+        .style("fill", function() { return color(Math.floor(Math.random() * 19)); })
+        .on('mouseover', function() {
+          tooltip.transition()
+                 .duration(100)
+                 .style('opacity', 0.9);
+          tooltip.html('test')
+                .style('left', (d3.event.pageX + 30) + 'px')
+                .style('top', (d3.event.pageY + 15) + 'px');
+        })
+        .on('mouseout', function() {
+          tooltip.transition()
+                 .duration(200)
+                 .style('opacity', 0);
+        });
 
         function transform(d) {
           d = new google.maps.LatLng(d.lat, d.long);
