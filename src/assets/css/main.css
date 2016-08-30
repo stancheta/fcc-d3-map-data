@@ -26,9 +26,10 @@ main {
 }
 
 .meteorites svg {
-  width:75px;
-  height:75px;
+  width:5px;
+  height:5px;
   font: 10px sans-serif;
+  overflow: visible;
 }
 
 .meteorites circle {

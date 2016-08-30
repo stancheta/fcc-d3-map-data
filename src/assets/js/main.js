@@ -71,8 +71,7 @@
         .attr("class", "meteorites");
 
       overlay.draw = function() {
-        var projection = this.getProjection(),
-        padding = 36;
+        var projection = this.getProjection();
 
         var marker = layer.selectAll("svg")
         .data(fData)
@@ -82,9 +81,7 @@
         .attr("class", "marker");
 
         marker.append("svg:circle")
-        .attr("r", function(d) { if (isNaN(meteoriteSize(d.mass))) console.log(d.mass); return meteoriteSize(d.mass); })
-        .attr("cx", padding)
-        .attr("cy", padding)
+        .attr("r", function(d) { return meteoriteSize(d.mass); })
         .style("fill", function() { return color(Math.floor(Math.random() * 19)); })
         .on('mouseover', function(d) {
           tooltip.transition()
@@ -110,8 +107,8 @@
           d = new google.maps.LatLng(d.lat, d.long);
           d = projection.fromLatLngToDivPixel(d);
           return d3.select(this)
-          .style("left", (d.x - padding) + "px")
-          .style("top", (d.y - padding) + "px");
+          .style("left", (d.x) + "px")
+          .style("top", (d.y) + "px");
         }
       };
     };
